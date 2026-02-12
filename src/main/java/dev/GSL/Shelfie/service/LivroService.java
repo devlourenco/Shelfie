@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LivroService {
@@ -42,8 +43,11 @@ public class LivroService {
         return mapper.toDto(livroSalvo);
     }
 
-    public List<LivroModel> listarLivros() {
-        return repository.findAll();
+    public List<LivroDTO> listarLivros() {
+        List<LivroModel> livro = repository.findAll();
+        return livro.stream()
+                .map(mapper::toDto)
+                .toList();
     }
 
     public void buscarPorId() {

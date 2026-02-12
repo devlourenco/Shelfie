@@ -6,8 +6,7 @@ import dev.GSL.Shelfie.mapper.LeituraMapper;
 import dev.GSL.Shelfie.model.LeituraModel;
 import dev.GSL.Shelfie.repository.LeituraRepository;
 
-
-import java.time.LocalDateTime;
+import java.util.List;
 
 public class LeituraService {
 
@@ -67,5 +66,12 @@ public class LeituraService {
         }
         LeituraModel leituraSalva = repository.save(leitura);
         return mapper.toDto(leituraSalva);
+    }
+
+    public List<LeituraDTO> listarLeituras() {
+        List<LeituraModel> leituras = repository.findAll();
+        return leituras.stream()
+                .map(mapper::toDto)
+                .toList();
     }
 }
