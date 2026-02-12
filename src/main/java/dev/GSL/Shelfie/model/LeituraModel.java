@@ -1,28 +1,32 @@
-package dev.GSL.Shelfie.Leitura;
+package dev.GSL.Shelfie.model;
 
-import ch.qos.logback.core.model.NamedModel;
-import dev.GSL.Shelfie.Livro.LivroModel;
+import dev.GSL.Shelfie.enums.StatusLeitura;
 import jakarta.persistence.*;
-import org.springframework.cglib.core.Local;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "tb_leitura")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LeituraModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    LocalDate dataInicio;
-    LocalDate dataFim;
-    Status status;
-    int paginaAtual;
-    int avaliacao;
-    String comentarioPessoal;
+    private Long id;
+    private LocalDate dataInicio;
+    private LocalDate dataFim;
+    private StatusLeitura status;
+    private int paginaAtual;
+    private int paginasTotais;
+    private int avaliacao;
+    private String comentarioPessoal;
 
     @ManyToOne()
-    @JoinColumn(name = "livros_id")
-    private List<LivroModel> livro;
+    @JoinColumn(name = "livro_id")
+    private LivroModel livro;
 }

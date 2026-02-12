@@ -1,8 +1,8 @@
-package dev.GSL.Shelfie.Leitura;
+package dev.GSL.Shelfie.enums;
 
-public enum Status {
+public enum StatusLeitura {
     NAO_INICIADO,
     EM_ANDAMENTO,
-    PAUSADO,
+    ABANDONADO,
     FINALIZADO;
 }
