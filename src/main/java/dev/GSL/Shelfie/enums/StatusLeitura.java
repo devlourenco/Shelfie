@@ -1,6 +1,6 @@
 package dev.GSL.Shelfie.Leitura;
 
-public enum StatusLeitura {
+public enum Status {
     NAO_INICIADO,
     EM_ANDAMENTO,
     PAUSADO,
