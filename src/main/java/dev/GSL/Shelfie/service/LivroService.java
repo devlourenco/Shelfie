@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class LivroService {
@@ -50,7 +50,9 @@ public class LivroService {
                 .toList();
     }
 
-    public void buscarPorId() {
+    public LivroDTO buscarPorId(Long id) {
+        Optional<LivroModel> livroPorId = repository.findById(id);
+        return livroPorId.map(mapper::toDto).orElseThrow();
     }
 
     public void atualizarLivro() {

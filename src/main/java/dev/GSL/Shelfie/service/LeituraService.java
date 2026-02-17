@@ -7,6 +7,7 @@ import dev.GSL.Shelfie.model.LeituraModel;
 import dev.GSL.Shelfie.repository.LeituraRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class LeituraService {
 
@@ -73,5 +74,10 @@ public class LeituraService {
         return leituras.stream()
                 .map(mapper::toDto)
                 .toList();
+    }
+
+    public LeituraDTO listarLeituraporId(Long id){
+        Optional<LeituraModel> leituraPorId = repository.findById(id);
+        return leituraPorId.map(mapper::toDto).orElseThrow();
     }
 }
