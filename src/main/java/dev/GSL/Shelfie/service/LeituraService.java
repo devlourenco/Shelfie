@@ -76,8 +76,80 @@ public class LeituraService {
                 .toList();
     }
 
-    public LeituraDTO listarLeituraporId(Long id){
+    public LeituraDTO listarLeituraporId(Long id) {
         Optional<LeituraModel> leituraPorId = repository.findById(id);
         return leituraPorId.map(mapper::toDto).orElseThrow();
     }
+
+    public LeituraDTO atualizarLeitura(Long id, LeituraDTO leituraDTO) {
+
+        LeituraModel leitura = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Leitura não encontrada"));
+
+        if (leitura.getLivro() != null) {
+            if (leitura.getDataInicio() == null) {
+                throw new RuntimeException("Informe uma data de ínicio da leitura");
+            }
+            if (leituraDTO.getDataFim() != null &&
+                    leituraDTO.getDataFim().isBefore(leituraDTO.getDataInicio())) {
+                throw new RuntimeException("A data de conclusão da leitura não pode ser anterior a data de começo da leitura.");
+            }
+            if (leitura.getStatus() == StatusLeitura.FINALIZADO) {
+                if (leitura.getDataFim() == null) {
+                    throw new RuntimeException("Por estar finalizado, a data de fim é obrigatória.");
+                }
+            }
+            if (leitura.getStatus() == StatusLeitura.EM_ANDAMENTO) {
+                if (leitura.getDataFim() != null) {
+                    leitura.setDataFim(null);
+                }
+            }
+            if (leitura.getPaginaAtual() >= 0) {
+                if (leitura.getStatus() == StatusLeitura.NAO_INICIADO) {
+                    leitura.setPaginaAtual(0);
+                }
+                if (leitura.getStatus() == StatusLeitura.EM_ANDAMENTO) {
+                    if (leitura.getPaginaAtual() <= 0) {
+                        throw new RuntimeException("Por estar lendo, a página atual deve ser maior que 0.");
+                    }
+                    if (leitura.getPaginaAtual() > leitura.getPaginasTotais()) {
+                        throw new RuntimeException("A página atual deve ser menor que o número de páginas totais.");
+                    }
+                    if (leitura.getStatus() == StatusLeitura.FINALIZADO) {
+                        if (leitura.getPaginaAtual() != leitura.getPaginasTotais()) {
+                            throw new RuntimeException("Para o livro ser finalizado, a página atual deve ser a mesma do número total de páginas do livro.");
+                        }
+                    }
+                }
+            } else {
+                throw new RuntimeException("A página atual deve ser maior que 0.");
+            }
+            if (leitura.getAvaliacao() < 0 || leitura.getAvaliacao() > 5) {
+                throw new RuntimeException("A avaliação deve estar entre 0 a 5, sendo 0 péssimo e 5 excelente.");
+            }
+        } else {
+            throw new RuntimeException("O livro deve existir na lista, crie um livro para iniciar os registros.");
+        }
+
+        leitura.setDataInicio(leituraDTO.getDataInicio());
+        leitura.setDataFim(leituraDTO.getDataFim());
+        leitura.setStatus(leituraDTO.getStatus());
+        leitura.setPaginaAtual(leituraDTO.getPaginaAtual());
+        leitura.setPaginasTotais(leituraDTO.getPaginasTotais());
+        leitura.setAvaliacao(leituraDTO.getAvaliacao());
+        leitura.setComentarioPessoal(leituraDTO.getComentarioPessoal());
+        leitura.setLivro(leituraDTO.getLivro());
+
+        return mapper.toDto(repository.save(leitura));
+    }
+
+    public void deletarLeitura(Long id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Leitura não encontrada para exclusão.");
+        }
+
+        repository.deleteById(id);
+    }
+
 }
+

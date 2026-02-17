@@ -55,10 +55,42 @@ public class LivroService {
         return livroPorId.map(mapper::toDto).orElseThrow();
     }
 
-    public void atualizarLivro() {
+    public LivroDTO atualizarLivro(LivroDTO livroDTO, Long id) {
+        LivroModel livroExistente = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Livro não encontrado."));
+
+        if (livroDTO.getTitulo() == null || livroDTO.getTitulo().trim().isEmpty()) {
+            throw new RuntimeException("Titulo do livro é obrigatório.");
+        }
+        if (livroDTO.getAutor() == null || livroDTO.getAutor().trim().isEmpty()) {
+            throw new RuntimeException("Autor do livro é obrigatório.");
+        }
+        if (livroDTO.getTotalPaginas() <= 0) {
+            throw new RuntimeException("O número de páginas deve ser maior que zero.");
+        }
+        if (livroDTO.getAnoPublicacao() <= 0 || livroDTO.getAnoPublicacao() > LocalDateTime.now().getYear()) {
+            throw new RuntimeException("Ano inválido, deve ser maior que zero e menor ou igual ano atual.");
+        }
+        if (livroDTO.getCategoria() == null) {
+            throw new RuntimeException("A categoria não pode estar vazia, organize seus livros!.");
+        }
+        livroDTO.setTitulo(livroDTO.getTitulo());
+        livroDTO.setAutor(livroDTO.getAutor());
+        livroDTO.setTotalPaginas(livroDTO.getTotalPaginas());
+        livroDTO.setCategoria(livroDTO.getCategoria());
+        livroDTO.setAnoPublicacao(livroDTO.getAnoPublicacao());
+        livroDTO.setObservacoes(livroDTO.getObservacoes());
+
+        LivroModel livroSalvo = repository.save(livroExistente);
+        return mapper.toDto(livroSalvo);
     }
 
+
     public void deletarLivro(Long id) {
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Livro não encontrado para exclusão.");
+        }
+
         repository.deleteById(id);
     }
 }
