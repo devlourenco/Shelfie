@@ -2,6 +2,7 @@ package dev.GSL.Shelfie.service;
 
 import dev.GSL.Shelfie.dto.LivroDTO;
 import dev.GSL.Shelfie.exception.RecursoNaoEncontrado;
+import dev.GSL.Shelfie.exception.RegraDeNegocio;
 import dev.GSL.Shelfie.mapper.LivroMapper;
 import dev.GSL.Shelfie.model.LivroModel;
 import dev.GSL.Shelfie.repository.LivroRepository;
@@ -26,19 +27,19 @@ public class LivroService {
     public LivroDTO criarLivro(LivroDTO livroDTO) {
         LivroModel livro = mapper.toModel(livroDTO);
         if (livro.getTitulo() == null || livro.getTitulo().trim().isEmpty()) {
-            throw new RecursoNaoEncontrado("Titulo do livro é obrigatório.");
+            throw new RegraDeNegocio("Titulo do livro é obrigatório.");
         }
         if (livro.getAutor() == null || livro.getAutor().trim().isEmpty()) {
-            throw new RecursoNaoEncontrado("Autor do livro é obrigatório.");
+            throw new RegraDeNegocio("Autor do livro é obrigatório.");
         }
         if (livro.getTotalPaginas() <= 0) {
-            throw new RecursoNaoEncontrado("O número de páginas deve ser maior que zero.");
+            throw new RegraDeNegocio("O número de páginas deve ser maior que zero.");
         }
         if (livro.getAnoPublicacao() <= 0 || livro.getAnoPublicacao() > LocalDateTime.now().getYear()) {
-            throw new RecursoNaoEncontrado("Ano inválido, deve ser maior que zero e menor ou igual ano atual.");
+            throw new RegraDeNegocio("Ano inválido, deve ser maior que zero e menor ou igual ano atual.");
         }
         if (livro.getCategoria() == null) {
-            throw new RecursoNaoEncontrado("A categoria não pode estar vazia, organize seus livros!.");
+            throw new RegraDeNegocio("A categoria não pode estar vazia, organize seus livros!.");
         }
 
         LivroModel livroSalvo = repository.save(livro);
@@ -54,7 +55,7 @@ public class LivroService {
 
     public LivroDTO buscarPorId(Long id) {
         Optional<LivroModel> livroPorId = repository.findById(id);
-        return livroPorId.map(mapper::toDto).orElseThrow();
+        return livroPorId.map(mapper::toDto).orElseThrow(() -> new RecursoNaoEncontrado("Livro não encontrado"));
     }
 
     public LivroDTO atualizarLivro(LivroDTO livroDTO, Long id) {
@@ -62,19 +63,19 @@ public class LivroService {
                 .orElseThrow(() -> new RecursoNaoEncontrado("Livro não encontrado."));
 
         if (livroDTO.getTitulo() == null || livroDTO.getTitulo().trim().isEmpty()) {
-            throw new RecursoNaoEncontrado("Titulo do livro é obrigatório.");
+            throw new RegraDeNegocio("Titulo do livro é obrigatório.");
         }
         if (livroDTO.getAutor() == null || livroDTO.getAutor().trim().isEmpty()) {
-            throw new RecursoNaoEncontrado("Autor do livro é obrigatório.");
+            throw new RegraDeNegocio("Autor do livro é obrigatório.");
         }
         if (livroDTO.getTotalPaginas() <= 0) {
-            throw new RecursoNaoEncontrado("O número de páginas deve ser maior que zero.");
+            throw new RegraDeNegocio("O número de páginas deve ser maior que zero.");
         }
         if (livroDTO.getAnoPublicacao() <= 0 || livroDTO.getAnoPublicacao() > LocalDateTime.now().getYear()) {
-            throw new RecursoNaoEncontrado("Ano inválido, deve ser maior que zero e menor ou igual ano atual.");
+            throw new RegraDeNegocio("Ano inválido, deve ser maior que zero e menor ou igual ano atual.");
         }
         if (livroDTO.getCategoria() == null) {
-            throw new RecursoNaoEncontrado("A categoria não pode estar vazia, organize seus livros!.");
+            throw new RegraDeNegocio("A categoria não pode estar vazia, organize seus livros!.");
         }
         livroDTO.setTitulo(livroDTO.getTitulo());
         livroDTO.setAutor(livroDTO.getAutor());
@@ -86,7 +87,6 @@ public class LivroService {
         LivroModel livroSalvo = repository.save(livroExistente);
         return mapper.toDto(livroSalvo);
     }
-
 
     public void deletarLivro(Long id) {
         if (!repository.existsById(id)) {
