@@ -2,6 +2,7 @@ package dev.GSL.Shelfie.controller;
 
 import dev.GSL.Shelfie.dto.LeituraDTO;
 import dev.GSL.Shelfie.service.LeituraService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +33,13 @@ public class LeituraController {
     }
 
     @PostMapping("/livros")
-    public ResponseEntity<LeituraDTO> criarLeitura(@RequestBody LeituraDTO leituraDTO) {
+    public ResponseEntity<LeituraDTO> criarLeitura(@Valid @RequestBody LeituraDTO leituraDTO) {
         LeituraDTO leitura = service.criarLeitura(leituraDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(leitura);
     }
 
     @PutMapping("/livros/{id}")
-    public ResponseEntity<LeituraDTO> atualizarLeitura(@PathVariable Long id, @RequestBody LeituraDTO leituraDTO) {
+    public ResponseEntity<LeituraDTO> atualizarLeitura(@PathVariable Long id, @Valid @RequestBody LeituraDTO leituraDTO) {
         LeituraDTO leituraAtualizada = service.atualizarLeitura(id, leituraDTO);
         return ResponseEntity.ok(leituraAtualizada);
     }

@@ -1,6 +1,7 @@
 package dev.GSL.Shelfie.exception;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 
 public class ErroResponse {
@@ -9,6 +10,7 @@ public class ErroResponse {
     private String error;
     private String message;
     private String path;
+    private Map<String, String> erros;
 
     public ErroResponse() {
     }
@@ -25,19 +27,47 @@ public class ErroResponse {
         return timestamp;
     }
 
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public int getStatus() {
         return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getError() {
         return error;
     }
 
+    public void setError(String error) {
+        this.error = error;
+    }
+
     public String getMessage() {
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public String getPath() {
         return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public Map<String, String> getErros() {
+        return erros;
+    }
+
+    public void setErros(Map<String, String> erros) {
+        this.erros = erros;
     }
 }

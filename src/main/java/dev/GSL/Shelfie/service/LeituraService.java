@@ -1,7 +1,6 @@
 package dev.GSL.Shelfie.service;
 
 import dev.GSL.Shelfie.dto.LeituraDTO;
-import dev.GSL.Shelfie.enums.StatusLeitura;
 import dev.GSL.Shelfie.exception.RecursoNaoEncontrado;
 import dev.GSL.Shelfie.exception.RegraDeNegocio;
 import dev.GSL.Shelfie.mapper.LeituraMapper;
@@ -21,55 +20,72 @@ public class LeituraService {
         this.mapper = mapper;
     }
 
-    public LeituraDTO criarLeitura(LeituraDTO leituraDTO) {
-        LeituraModel leitura = mapper.toModel(leituraDTO);
+    public LeituraDTO criarLeitura(LeituraDTO dto) {
 
-        if (leitura.getLivro() != null) {
-            if (leitura.getDataInicio() == null) {
-                throw new RegraDeNegocio("Informe uma data de ínicio da leitura");
-            }
-            if (leitura.getDataFim() == null || leitura.getDataFim().isBefore(leitura.getDataInicio())) {
-                throw new RegraDeNegocio("A data de conclusão da leitura não pode ser anterior a data de começo da leitura.");
-            }
-            if (leitura.getStatus() == StatusLeitura.FINALIZADO) {
-                if (leitura.getDataFim() == null) {
-                    throw new RegraDeNegocio("Por estar finalizado, a data de fim é obrigatória.");
-                }
-            }
-            if (leitura.getStatus() == StatusLeitura.EM_ANDAMENTO) {
-                if (leitura.getDataFim() != null) {
-                    leitura.setDataFim(null);
-                }
-            }
-            if (leitura.getPaginaAtual() >= 0) {
-                if (leitura.getStatus() == StatusLeitura.NAO_INICIADO) {
-                    leitura.setPaginaAtual(0);
-                }
-                if (leitura.getStatus() == StatusLeitura.EM_ANDAMENTO) {
-                    if (leitura.getPaginaAtual() <= 0) {
-                        throw new RegraDeNegocio("Por estar lendo, a página atual deve ser maior que 0.");
-                    }
-                    if (leitura.getPaginaAtual() > leitura.getPaginasTotais()) {
-                        throw new RegraDeNegocio("A página atual deve ser menor que o número de páginas totais.");
-                    }
-                    if (leitura.getStatus() == StatusLeitura.FINALIZADO) {
-                        if (leitura.getPaginaAtual() != leitura.getPaginasTotais()) {
-                            throw new RegraDeNegocio("Para o livro ser finalizado, a página atual deve ser a mesma do número total de páginas do livro.");
-                        }
-                    }
-                }
-            } else {
-                throw new RegraDeNegocio("A página atual deve ser maior que 0.");
-            }
-            if (leitura.getAvaliacao() < 0 || leitura.getAvaliacao() > 5) {
-                throw new RegraDeNegocio("A avaliação deve estar entre 0 a 5, sendo 0 péssimo e 5 excelente.");
-            }
-        } else {
-            throw new RegraDeNegocio("O livro deve existir na lista, crie um livro para iniciar os registros.");
-        }
-        LeituraModel leituraSalva = repository.save(leitura);
-        return mapper.toDto(leituraSalva);
+        LeituraModel leitura = mapper.toModel(dto);
+
+        validarDatas(leitura);
+        validarStatus(leitura);
+
+        return mapper.toDto(repository.save(leitura));
     }
+
+    private void validarDatas(LeituraModel leitura) {
+
+        if (leitura.getDataFim() != null &&
+                leitura.getDataFim().isBefore(leitura.getDataInicio())) {
+
+            throw new RegraDeNegocio(
+                    "A data de conclusão não pode ser anterior à data de início.");
+        }
+    }
+
+    private void validarStatus(LeituraModel leitura) {
+
+        switch (leitura.getStatus()) {
+
+            case NAO_INICIADO:
+                leitura.setPaginaAtual(0);
+                leitura.setDataFim(null);
+                break;
+
+            case EM_ANDAMENTO:
+                validarEmAndamento(leitura);
+                break;
+
+            case FINALIZADO:
+                validarFinalizado(leitura);
+                break;
+        }
+    }
+
+    private void validarEmAndamento(LeituraModel leitura) {
+
+        if (leitura.getPaginaAtual() <= 0) {
+            throw new RegraDeNegocio(
+                    "Por estar lendo, a página atual deve ser maior que 0.");
+        }
+
+        if (leitura.getPaginaAtual() > leitura.getPaginasTotais()) {
+            throw new RegraDeNegocio(
+                    "A página atual não pode ultrapassar o total de páginas.");
+        }
+
+        leitura.setDataFim(null);
+    }
+    private void validarFinalizado(LeituraModel leitura) {
+
+        if (leitura.getDataFim() == null) {
+            throw new RegraDeNegocio(
+                    "Por estar finalizado, a data de fim é obrigatória.");
+        }
+
+        if (leitura.getPaginaAtual() != (leitura.getPaginasTotais())) {
+            throw new RegraDeNegocio(
+                    "Para finalizar, a página atual deve ser igual ao total de páginas.");
+        }
+    }
+
 
     public List<LeituraDTO> listarLeituras() {
         List<LeituraModel> leituras = repository.findAll();
@@ -88,50 +104,8 @@ public class LeituraService {
         LeituraModel leitura = repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontrado("Leitura não encontrada"));
 
-        if (leitura.getLivro() != null) {
-            if (leitura.getDataInicio() == null) {
-                throw new RegraDeNegocio("Informe uma data de ínicio da leitura");
-            }
-            if (leituraDTO.getDataFim() != null &&
-                    leituraDTO.getDataFim().isBefore(leituraDTO.getDataInicio())) {
-                throw new RegraDeNegocio("A data de conclusão da leitura não pode ser anterior a data de começo da leitura.");
-            }
-            if (leitura.getStatus() == StatusLeitura.FINALIZADO) {
-                if (leitura.getDataFim() == null) {
-                    throw new RegraDeNegocio("Por estar finalizado, a data de fim é obrigatória.");
-                }
-            }
-            if (leitura.getStatus() == StatusLeitura.EM_ANDAMENTO) {
-                if (leitura.getDataFim() != null) {
-                    leitura.setDataFim(null);
-                }
-            }
-            if (leitura.getPaginaAtual() >= 0) {
-                if (leitura.getStatus() == StatusLeitura.NAO_INICIADO) {
-                    leitura.setPaginaAtual(0);
-                }
-                if (leitura.getStatus() == StatusLeitura.EM_ANDAMENTO) {
-                    if (leitura.getPaginaAtual() <= 0) {
-                        throw new RegraDeNegocio("Por estar lendo, a página atual deve ser maior que 0.");
-                    }
-                    if (leitura.getPaginaAtual() > leitura.getPaginasTotais()) {
-                        throw new RegraDeNegocio("A página atual deve ser menor que o número de páginas totais.");
-                    }
-                    if (leitura.getStatus() == StatusLeitura.FINALIZADO) {
-                        if (leitura.getPaginaAtual() != leitura.getPaginasTotais()) {
-                            throw new RegraDeNegocio("Para o livro ser finalizado, a página atual deve ser a mesma do número total de páginas do livro.");
-                        }
-                    }
-                }
-            } else {
-                throw new RegraDeNegocio("A página atual deve ser maior que 0.");
-            }
-            if (leitura.getAvaliacao() < 0 || leitura.getAvaliacao() > 5) {
-                throw new RegraDeNegocio("A avaliação deve estar entre 0 a 5, sendo 0 péssimo e 5 excelente.");
-            }
-        } else {
-            throw new RegraDeNegocio("O livro deve existir na lista, crie um livro para iniciar os registros.");
-        }
+        validarDatas(leitura);
+        validarStatus(leitura);
 
         leitura.setDataInicio(leituraDTO.getDataInicio());
         leitura.setDataFim(leituraDTO.getDataFim());

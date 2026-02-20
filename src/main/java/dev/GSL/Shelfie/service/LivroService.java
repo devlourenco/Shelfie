@@ -23,27 +23,12 @@ public class LivroService {
         this.mapper = mapper;
     }
 
-
     public LivroDTO criarLivro(LivroDTO livroDTO) {
+        if (repository.existsByTituloIgnoreCase(livroDTO.getTitulo())) {
+            throw new RegraDeNegocio("Já existe um livro com esse título.");
+        }
         LivroModel livro = mapper.toModel(livroDTO);
-        if (livro.getTitulo() == null || livro.getTitulo().trim().isEmpty()) {
-            throw new RegraDeNegocio("Titulo do livro é obrigatório.");
-        }
-        if (livro.getAutor() == null || livro.getAutor().trim().isEmpty()) {
-            throw new RegraDeNegocio("Autor do livro é obrigatório.");
-        }
-        if (livro.getTotalPaginas() <= 0) {
-            throw new RegraDeNegocio("O número de páginas deve ser maior que zero.");
-        }
-        if (livro.getAnoPublicacao() <= 0 || livro.getAnoPublicacao() > LocalDateTime.now().getYear()) {
-            throw new RegraDeNegocio("Ano inválido, deve ser maior que zero e menor ou igual ano atual.");
-        }
-        if (livro.getCategoria() == null) {
-            throw new RegraDeNegocio("A categoria não pode estar vazia, organize seus livros!.");
-        }
-
-        LivroModel livroSalvo = repository.save(livro);
-        return mapper.toDto(livroSalvo);
+        return mapper.toDto((repository.save(livro)));
     }
 
     public List<LivroDTO> listarLivros() {
@@ -60,22 +45,13 @@ public class LivroService {
 
     public LivroDTO atualizarLivro(LivroDTO livroDTO, Long id) {
         LivroModel livroExistente = repository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontrado("Livro não encontrado."));
+                .orElseThrow(() ->
+                        new RecursoNaoEncontrado("Livro não encontrado."));
 
-        if (livroDTO.getTitulo() == null || livroDTO.getTitulo().trim().isEmpty()) {
-            throw new RegraDeNegocio("Titulo do livro é obrigatório.");
-        }
-        if (livroDTO.getAutor() == null || livroDTO.getAutor().trim().isEmpty()) {
-            throw new RegraDeNegocio("Autor do livro é obrigatório.");
-        }
-        if (livroDTO.getTotalPaginas() <= 0) {
-            throw new RegraDeNegocio("O número de páginas deve ser maior que zero.");
-        }
-        if (livroDTO.getAnoPublicacao() <= 0 || livroDTO.getAnoPublicacao() > LocalDateTime.now().getYear()) {
-            throw new RegraDeNegocio("Ano inválido, deve ser maior que zero e menor ou igual ano atual.");
-        }
-        if (livroDTO.getCategoria() == null) {
-            throw new RegraDeNegocio("A categoria não pode estar vazia, organize seus livros!.");
+        if (!livroExistente.getTitulo().equalsIgnoreCase(livroDTO.getTitulo()) &&
+                repository.existsByTituloIgnoreCase(livroDTO.getTitulo())) {
+
+            throw new RegraDeNegocio("Já existe um livro com esse título.");
         }
         livroDTO.setTitulo(livroDTO.getTitulo());
         livroDTO.setAutor(livroDTO.getAutor());
