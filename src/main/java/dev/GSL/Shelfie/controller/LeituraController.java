@@ -15,6 +15,7 @@ public class LeituraController {
 
     private final LeituraService service;
 
+
     public LeituraController(LeituraService service) {
         this.service = service;
     }
@@ -32,13 +33,13 @@ public class LeituraController {
         return ResponseEntity.ok(livros);
     }
 
-    @PostMapping("/livros")
+    @PostMapping("/criarLeitura")
     public ResponseEntity<LeituraDTO> criarLeitura(@Valid @RequestBody LeituraDTO leituraDTO) {
         LeituraDTO leitura = service.criarLeitura(leituraDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(leitura);
     }
 
-    @PutMapping("/livros/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<LeituraDTO> atualizarLeitura(@PathVariable Long id, @Valid @RequestBody LeituraDTO leituraDTO) {
         LeituraDTO leituraAtualizada = service.atualizarLeitura(id, leituraDTO);
         return ResponseEntity.ok(leituraAtualizada);

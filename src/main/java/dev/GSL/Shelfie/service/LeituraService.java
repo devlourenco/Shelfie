@@ -5,24 +5,36 @@ import dev.GSL.Shelfie.exception.RecursoNaoEncontrado;
 import dev.GSL.Shelfie.exception.RegraDeNegocio;
 import dev.GSL.Shelfie.mapper.LeituraMapper;
 import dev.GSL.Shelfie.model.LeituraModel;
+import dev.GSL.Shelfie.model.LivroModel;
 import dev.GSL.Shelfie.repository.LeituraRepository;
+import dev.GSL.Shelfie.repository.LivroRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class LeituraService {
 
     private final LeituraRepository repository;
     private final LeituraMapper mapper;
+    private final LivroRepository livroRepository;
 
-    public LeituraService(LeituraRepository repository, LeituraMapper mapper) {
+    public LeituraService(LeituraRepository repository, LeituraMapper mapper, LivroRepository livroRepository) {
         this.repository = repository;
         this.mapper = mapper;
+        this.livroRepository = livroRepository;
     }
 
-    public LeituraDTO criarLeitura(LeituraDTO dto) {
+    public LeituraDTO criarLeitura(LeituraDTO leituraDTO) {
 
-        LeituraModel leitura = mapper.toModel(dto);
+        LivroModel livro = livroRepository.findById(leituraDTO.getLivroId())
+                .orElseThrow(() ->
+                        new RecursoNaoEncontrado("Livro não encontrado."));
+
+        LeituraModel leitura = mapper.toModel(leituraDTO);
+
+        leitura.setLivro(livro);
 
         validarDatas(leitura);
         validarStatus(leitura);
@@ -73,6 +85,7 @@ public class LeituraService {
 
         leitura.setDataFim(null);
     }
+
     private void validarFinalizado(LeituraModel leitura) {
 
         if (leitura.getDataFim() == null) {
@@ -114,7 +127,6 @@ public class LeituraService {
         leitura.setPaginasTotais(leituraDTO.getPaginasTotais());
         leitura.setAvaliacao(leituraDTO.getAvaliacao());
         leitura.setComentarioPessoal(leituraDTO.getComentarioPessoal());
-        leitura.setLivro(leituraDTO.getLivro());
 
         return mapper.toDto(repository.save(leitura));
     }

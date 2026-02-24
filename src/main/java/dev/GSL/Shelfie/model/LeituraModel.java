@@ -27,6 +27,6 @@ public class LeituraModel {
     private String comentarioPessoal;
 
     @ManyToOne()
-    @JoinColumn(name = "livro_id")
+    @JoinColumn(name = "livro_id", nullable = false)
     private LivroModel livro;
 }

@@ -8,7 +8,6 @@ import dev.GSL.Shelfie.model.LivroModel;
 import dev.GSL.Shelfie.repository.LivroRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,17 +47,12 @@ public class LivroService {
                 .orElseThrow(() ->
                         new RecursoNaoEncontrado("Livro não encontrado."));
 
-        if (!livroExistente.getTitulo().equalsIgnoreCase(livroDTO.getTitulo()) &&
-                repository.existsByTituloIgnoreCase(livroDTO.getTitulo())) {
-
-            throw new RegraDeNegocio("Já existe um livro com esse título.");
-        }
-        livroDTO.setTitulo(livroDTO.getTitulo());
-        livroDTO.setAutor(livroDTO.getAutor());
-        livroDTO.setTotalPaginas(livroDTO.getTotalPaginas());
-        livroDTO.setCategoria(livroDTO.getCategoria());
-        livroDTO.setAnoPublicacao(livroDTO.getAnoPublicacao());
-        livroDTO.setObservacoes(livroDTO.getObservacoes());
+        livroExistente.setTitulo(livroDTO.getTitulo());
+        livroExistente.setAutor(livroDTO.getAutor());
+        livroExistente.setTotalPaginas(livroDTO.getTotalPaginas());
+        livroExistente.setCategoria(livroDTO.getCategoria());
+        livroExistente.setAnoPublicacao(livroDTO.getAnoPublicacao());
+        livroExistente.setObservacoes(livroDTO.getObservacoes());
 
         LivroModel livroSalvo = repository.save(livroExistente);
         return mapper.toDto(livroSalvo);

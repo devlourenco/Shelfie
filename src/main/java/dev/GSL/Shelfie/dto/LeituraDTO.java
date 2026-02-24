@@ -1,7 +1,6 @@
 package dev.GSL.Shelfie.dto;
 
 import dev.GSL.Shelfie.enums.StatusLeitura;
-import dev.GSL.Shelfie.model.LivroModel;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class LeituraDTO {
 
-    @NotNull(message = "Livro é obrigatório")
+
     private Long id;
 
     @NotNull(message = "A data de ínicio da leitura é obrigatória")
@@ -39,6 +38,7 @@ public class LeituraDTO {
 
     private String comentarioPessoal;
 
-    private LivroModel livro;
+    @NotNull(message = "Livro é obrigatório")
+    private Long livroId;
 
 }

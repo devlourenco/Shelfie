@@ -37,5 +37,4 @@ public class LivroDTO {
     @Size(max = 500, message = "Observações podem ter no máximo 500 caracteres")
     private String observacoes;
 
-    private List<LeituraModel> leitura;
 }

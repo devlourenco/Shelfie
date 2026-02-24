@@ -20,20 +20,20 @@ public class LivroController {
         this.service = service;
     }
 
-    @GetMapping("/livros/{id}")
-    public ResponseEntity<LivroDTO> listarLivro(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<LivroDTO> listarLivroPorId(@PathVariable Long id) {
         LivroDTO livro = service.buscarPorId(id);
 
         return ResponseEntity.ok(livro);
     }
 
-    @GetMapping("/livros")
+    @GetMapping
     public ResponseEntity<List<LivroDTO>> listarLivros() {
         List<LivroDTO> livro = service.listarLivros();
         return ResponseEntity.ok(livro);
     }
 
-    @PostMapping("/livros")
+    @PostMapping
     public ResponseEntity<LivroDTO> criarLivro(@Valid @RequestBody LivroDTO livroDTO) {
         LivroDTO livroNovo = service.criarLivro(livroDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(livroNovo);

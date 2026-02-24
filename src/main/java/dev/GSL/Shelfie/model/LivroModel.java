@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,6 @@ public class LivroModel {
     String observacoes;
 
     @OneToMany(mappedBy = "livro")
-    private List<LeituraModel> leitura;
+    private List<LeituraModel> leitura = new ArrayList<>();
 
 }

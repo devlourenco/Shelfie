@@ -17,7 +17,6 @@ public class LivroMapper {
         livroModel.setCategoria(livroDTO.getCategoria());
         livroModel.setAnoPublicacao(livroDTO.getAnoPublicacao());
         livroModel.setObservacoes(livroDTO.getObservacoes());
-        livroModel.setLeitura(livroDTO.getLeitura());
 
         return livroModel;
     }
@@ -30,8 +29,7 @@ public class LivroMapper {
         livroDTO.setTotalPaginas(livroModel.getTotalPaginas());
         livroDTO.setCategoria(livroModel.getCategoria());
         livroDTO.setAnoPublicacao(livroModel.getAnoPublicacao());
-        livroDTO.setObservacoes(livroDTO.getObservacoes());
-        livroDTO.setLeitura(livroModel.getLeitura());
+        livroDTO.setObservacoes(livroModel.getObservacoes());
 
         return livroDTO;
     }

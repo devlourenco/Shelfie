@@ -18,8 +18,6 @@ public class LeituraMapper {
         leituraModel.setPaginasTotais(leituraDTO.getPaginasTotais());
         leituraModel.setAvaliacao(leituraDTO.getAvaliacao());
         leituraModel.setComentarioPessoal(leituraDTO.getComentarioPessoal());
-        leituraModel.setLivro(leituraDTO.getLivro());
-
         return leituraModel;
     }
 
@@ -33,7 +31,6 @@ public class LeituraMapper {
         leituraDTO.setPaginasTotais(leituraModel.getPaginasTotais());
         leituraDTO.setAvaliacao(leituraModel.getAvaliacao());
         leituraDTO.setComentarioPessoal(leituraModel.getComentarioPessoal());
-        leituraDTO.setLivro(leituraModel.getLivro());
 
         return leituraDTO;
     }
