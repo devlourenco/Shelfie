@@ -11,7 +11,7 @@ import br.com.Shelfie.repository.ShelfieRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class ShelfieService {
@@ -25,13 +25,17 @@ public class ShelfieService {
 
     //Criar Livro
     public ShelfieDTO cadastrarLivro(ShelfieDTO shelfieDTO) {
-        Optional<ShelfieModel> livroEncontrado = repository.findByTitulo(shelfieDTO.getTitulo());
-        if (livroEncontrado.isPresent()) {
+        boolean livroJaExiste =
+                repository.existsByTituloIgnoreCaseAndAutorIgnoreCase(
+                        shelfieDTO.getTitulo(),
+                        shelfieDTO.getAutor()
+                );
+        if (livroJaExiste) {
             throw new LivroDuplicadoException();
         }
         ShelfieModel novoLivro = mapper.toModel(shelfieDTO);
-        ShelfieModel resposta = repository.save(novoLivro);
-        return mapper.toDto(resposta);
+        ShelfieModel livroSalvo = repository.save(novoLivro);
+        return mapper.toDto(livroSalvo);
     }
     //Listar todos os livros
 

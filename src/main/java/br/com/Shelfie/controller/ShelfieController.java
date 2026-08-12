@@ -6,7 +6,7 @@ import br.com.Shelfie.enums.StatusDeLeitura;
 import br.com.Shelfie.services.ShelfieService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.validation.Valid;
 import java.util.List;
 
 
@@ -20,7 +20,7 @@ public class ShelfieController {
     }
 
     @PostMapping
-    public ResponseEntity<ShelfieDTO> cadastrarLivro(@RequestBody ShelfieDTO shelfieDTO) {
+    public ResponseEntity<ShelfieDTO> cadastrarLivro(@Valid @RequestBody ShelfieDTO shelfieDTO) {
         ShelfieDTO livroCriado = service.cadastrarLivro(shelfieDTO);
         return ResponseEntity
                 .status(201)

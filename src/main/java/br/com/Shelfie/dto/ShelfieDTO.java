@@ -2,13 +2,27 @@ package br.com.Shelfie.dto;
 
 import br.com.Shelfie.enums.Avaliacao;
 import br.com.Shelfie.enums.StatusDeLeitura;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class ShelfieDTO {
     private Long id;
+
+    @NotBlank(message = "O título é obrigatório")
     private String titulo;
+
+    @NotBlank(message = "O autor é obrigatório")
     private String autor;
+
+    @NotBlank(message = "O gênero é obrigatório")
     private String genero;
+
+    @NotNull(message = "O número de páginas é obrigatório.")
+    @Positive(message = "O número de páginas deve ser maior que zero.")
     private Integer numPaginas;
+
+    @NotNull(message = "O status de leitura é obrigatório.")
     private StatusDeLeitura statusDeLeitura;
     private Avaliacao avaliacao;
 

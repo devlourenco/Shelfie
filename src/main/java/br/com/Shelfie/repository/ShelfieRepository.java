@@ -18,4 +18,9 @@ public interface ShelfieRepository extends JpaRepository<ShelfieModel, Long> {
     Optional<ShelfieModel> findByStatusDeLeitura(StatusDeLeitura statusDeLeitura);
 
     Optional<ShelfieModel> findByAvaliacao(Avaliacao avaliacao);
+
+    boolean existsByTituloIgnoreCaseAndAutorIgnoreCase(
+            String titulo,
+            String autor
+    );
 }
