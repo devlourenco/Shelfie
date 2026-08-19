@@ -68,35 +68,38 @@ public class ShelfieService {
     }
 
     //ListarPorAutor
-    public ShelfieDTO listarPorAutor(String autor) {
-        ShelfieModel listarPorAutor = repository.findByAutor(autor).orElseThrow(() -> new LivroNaoEncontradoException(
-                "Livro com o autor '" + autor + "' não encontrado."
-        ));
-        return mapper.toDto(listarPorAutor);
+    public List<ShelfieDTO> listarPorAutor(String autor) {
+        List<ShelfieModel> livros = repository.findByAutor(autor);
+
+        return livros.stream()
+                .map(mapper::toDto)
+                .toList();
     }
 
     //ListarPorGenero
-    public ShelfieDTO listarPorGenero(String genero) {
-        ShelfieModel listarPorGenero = repository.findByGenero(genero).orElseThrow(() -> new LivroNaoEncontradoException(
-                "Livro com o gênero '" + genero + "' não encontrado."
-        ));
-        return mapper.toDto(listarPorGenero);
+    public List<ShelfieDTO> listarPorGenero(String genero) {
+        List<ShelfieModel> livros = repository.findByGenero(genero);
+
+        return livros.stream()
+                .map(mapper::toDto)
+                .toList();
     }
 
     //ListarPorStatus
-    public ShelfieDTO listarPorStatusDeLeitura(StatusDeLeitura statusDeLeitura) {
-        ShelfieModel listarPorStatusDeLeitura = repository.findByStatusDeLeitura(statusDeLeitura).orElseThrow(() -> new LivroNaoEncontradoException(
-                "Livro com o status '" + statusDeLeitura + "' não encontrado."
-        ));
-        return mapper.toDto(listarPorStatusDeLeitura);
+    public List<ShelfieDTO> listarPorStatusDeLeitura(StatusDeLeitura statusDeLeitura) {
+        List<ShelfieModel> livros = repository.findByStatusDeLeitura(statusDeLeitura);
+
+        return livros.stream()
+                .map(mapper::toDto)
+                .toList();
     }
 
     //ListarPorAvalicao
-    public ShelfieDTO listarPorAvaliacao(Avaliacao avaliacao) {
-        ShelfieModel listarPorAvaliacao = repository.findByAvaliacao(avaliacao).orElseThrow(() -> new LivroNaoEncontradoException(
-                "Livro com a avaliação '" + avaliacao + "' não encontrado."
-        ));
-        return mapper.toDto(listarPorAvaliacao);
+    public List<ShelfieDTO> listarPorAvaliacao(Avaliacao avaliacao) {
+        List<ShelfieModel> livros = repository.findByAvaliacao(avaliacao);
+        return livros.stream()
+                .map(mapper::toDto)
+                .toList();
     }
 
 

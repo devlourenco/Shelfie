@@ -7,6 +7,7 @@ import br.com.Shelfie.services.ShelfieService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+
 import java.util.List;
 
 
@@ -47,27 +48,28 @@ public class ShelfieController {
     }
 
     @GetMapping("/autor")
-    public ResponseEntity<ShelfieDTO> listarLivroPorAutor(@RequestParam String autor) {
-        ShelfieDTO listarLivroPorAutor = service.listarPorAutor(autor);
-        return ResponseEntity.ok(listarLivroPorAutor);
+    public ResponseEntity<List<ShelfieDTO>> listarLivroPorAutor(@RequestParam String autor) {
+        List<ShelfieDTO> livros = service.listarPorAutor(autor);
+
+        return ResponseEntity.ok(livros);
     }
 
     @GetMapping("/genero")
-    public ResponseEntity<ShelfieDTO> listarLivroPorGenero(@RequestParam String genero) {
-        ShelfieDTO listarLivroPorGenero = service.listarPorGenero(genero);
-        return ResponseEntity.ok(listarLivroPorGenero);
+    public ResponseEntity<List<ShelfieDTO>> listarLivroPorGenero(@RequestParam String genero) {
+        List<ShelfieDTO> livros = service.listarPorGenero(genero);
+        return ResponseEntity.ok(livros);
     }
 
     @GetMapping("/status")
-    public ResponseEntity<ShelfieDTO> listarLivroPorStatus(@RequestParam StatusDeLeitura statusDeLeitura) {
-        ShelfieDTO listarLivroPorStatus = service.listarPorStatusDeLeitura(statusDeLeitura);
-        return ResponseEntity.ok(listarLivroPorStatus);
+    public ResponseEntity<List<ShelfieDTO>> listarLivroPorStatus(@RequestParam StatusDeLeitura statusDeLeitura) {
+        List<ShelfieDTO> livros = service.listarPorStatusDeLeitura(statusDeLeitura);
+        return ResponseEntity.ok(livros);
     }
 
     @GetMapping("/avaliacao")
-    public ResponseEntity<ShelfieDTO> listarLivroPorAvaliacao(@RequestParam Avaliacao avaliacao) {
-        ShelfieDTO listarLivroPorAvaliacao = service.listarPorAvaliacao(avaliacao);
-        return ResponseEntity.ok(listarLivroPorAvaliacao);
+    public ResponseEntity<List<ShelfieDTO>> listarLivroPorAvaliacao(@RequestParam Avaliacao avaliacao) {
+        List<ShelfieDTO> livros = service.listarPorAvaliacao(avaliacao);
+        return ResponseEntity.ok(livros);
     }
 
     @PatchMapping("/{id}")

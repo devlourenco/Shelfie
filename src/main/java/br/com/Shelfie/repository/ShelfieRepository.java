@@ -1,4 +1,5 @@
 package br.com.Shelfie.repository;
+import java.util.List;
 
 import br.com.Shelfie.entity.ShelfieModel;
 import br.com.Shelfie.enums.Avaliacao;
@@ -11,13 +12,13 @@ public interface ShelfieRepository extends JpaRepository<ShelfieModel, Long> {
 
     Optional<ShelfieModel> findByTitulo(String titulo);
 
-    Optional<ShelfieModel> findByAutor(String autor);
+    List<ShelfieModel> findByAutor(String autor);
 
-    Optional<ShelfieModel> findByGenero(String genero);
+    List<ShelfieModel> findByGenero(String genero);
 
-    Optional<ShelfieModel> findByStatusDeLeitura(StatusDeLeitura statusDeLeitura);
+    List<ShelfieModel> findByStatusDeLeitura(StatusDeLeitura statusDeLeitura);
 
-    Optional<ShelfieModel> findByAvaliacao(Avaliacao avaliacao);
+    List<ShelfieModel> findByAvaliacao(Avaliacao avaliacao);
 
     boolean existsByTituloIgnoreCaseAndAutorIgnoreCase(
             String titulo,
