@@ -1,57 +1,12 @@
-# 📚 Shelfie
+# Shelfie
 
-> API REST para gerenciamento de livros e acompanhamento de leituras, desenvolvida com Java e Spring Boot como projeto de estudo e evolução em desenvolvimento Back-end.
+API REST para gerenciamento de livros e acompanhamento de leitura, desenvolvida com **Java e Spring Boot**.
 
-[![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://www.java.com/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.x-6DB33F?style=flat-square&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
-[![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=flat-square&logo=apachemaven&logoColor=white)](https://maven.apache.org/)
-[![GitHub](https://img.shields.io/badge/GitHub-devlourenco-181717?style=flat-square&logo=github)](https://github.com/devlourenco)
-![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow?style=flat-square)
+O projeto foi criado com o objetivo de praticar desenvolvimento Back-end utilizando conceitos presentes em aplicações reais, como arquitetura em camadas, persistência de dados, DTOs, regras de negócio, tratamento de exceções, documentação de API e testes automatizados.
 
 ---
 
-## Sobre o projeto
-
-**Shelfie** é uma API REST criada para cadastrar, consultar, atualizar e remover livros, além de acompanhar informações relacionadas à leitura, como status e avaliação.
-
-O projeto faz parte dos meus estudos de **Java, Spring Boot e desenvolvimento Back-end**.
-
-Sou estudante de **Sistemas de Informação** e estou me preparando para conquistar minha **primeira oportunidade profissional como estagiário em desenvolvimento de software**.
-
-Por isso, o objetivo do Shelfie vai além de construir um CRUD funcional. Estou utilizando o projeto para praticar conceitos encontrados no desenvolvimento de aplicações reais, melhorar minha organização de código, aprender boas práticas e desenvolver maior autonomia na resolução de problemas.
-
-O desenvolvimento acontece de forma incremental: implemento uma funcionalidade, testo seu comportamento, reviso decisões técnicas e registro a evolução através do Git.
-
----
-
-## 🎯 Objetivos de aprendizado
-
-Com o Shelfie estou praticando:
-
-- desenvolvimento de APIs REST;
-- Java e orientação a objetos;
-- Spring Boot;
-- arquitetura em camadas;
-- Spring Data JPA;
-- persistência de dados;
-- DTOs;
-- mapeamento entre DTO e Entity;
-- tratamento global de exceções;
-- exceções personalizadas;
-- códigos de status HTTP;
-- contratos REST;
-- regras de negócio;
-- Maven;
-- Git e GitHub;
-- testes manuais de API com Postman;
-- organização de commits;
-- leitura, revisão e refatoração de código.
-
-Mais do que fazer uma funcionalidade funcionar, procuro entender **por que cada classe, anotação e decisão existe dentro da aplicação**.
-
----
-
-# ✅ Funcionalidades atuais
+## Funcionalidades
 
 - [x] Cadastro de livros
 - [x] Listagem de todos os livros
@@ -66,33 +21,40 @@ Mais do que fazer uma funcionalidade funcionar, procuro entender **por que cada 
 - [x] Identificação de livros duplicados
 - [x] Exceções personalizadas
 - [x] Tratamento global de exceções
-- [x] Respostas HTTP adequadas para as principais operações
+- [x] Validação dos dados de cadastro
+- [x] Documentação com Swagger / OpenAPI
+- [x] Testes unitários da camada de serviço
 
 ---
 
-# 🛠️ Tecnologias
+## Tecnologias
 
 | Tecnologia | Utilização |
 |---|---|
 | **Java** | Linguagem principal |
 | **Spring Boot** | Estrutura da aplicação |
 | **Spring Web MVC** | Construção dos endpoints REST |
-| **Spring Data JPA** | Comunicação com a camada de persistência |
+| **Spring Data JPA** | Acesso e persistência dos dados |
 | **Hibernate** | ORM |
-| **H2 Database** | Banco de dados durante o desenvolvimento |
-| **Maven** | Gerenciamento de dependências e build |
+| **H2 Database** | Banco de dados utilizado no desenvolvimento |
+| **Bean Validation** | Validação dos dados recebidos |
+| **Maven** | Build e gerenciamento de dependências |
 | **Lombok** | Redução de código repetitivo |
-| **Git / GitHub** | Versionamento |
-| **Postman** | Testes manuais da API |
+| **Swagger / OpenAPI** | Documentação interativa da API |
+| **JUnit / Mockito** | Testes unitários |
+| **Git / GitHub** | Versionamento do projeto |
 
 ---
 
-# 🏗️ Arquitetura
+## Arquitetura
 
-O projeto utiliza uma arquitetura em camadas para separar as responsabilidades da aplicação.
+O Shelfie utiliza uma arquitetura em camadas para separar as responsabilidades da aplicação.
 
 ```text
 src/main/java/br/com/Shelfie
+│
+├── config
+│   └── OpenApiConfig.java
 │
 ├── controller
 │   └── ShelfieController.java
@@ -124,7 +86,7 @@ src/main/java/br/com/Shelfie
     └── ShelfieService.java
 ```
 
-### Fluxo simplificado
+### Fluxo principal
 
 ```text
 Request HTTP
@@ -144,47 +106,45 @@ Request HTTP
 
 A resposta percorre o caminho inverso até ser devolvida ao cliente.
 
----
+### Responsabilidade das camadas
 
-# 📂 Responsabilidade das camadas
+**Controller**
 
-### Controller
+Responsável pela interface HTTP da aplicação. Recebe as requisições, encaminha os dados para a camada de serviço e constrói as respostas HTTP.
 
-Responsável pela interface HTTP da aplicação.
+**Service**
 
-Recebe as requisições, encaminha os dados para a camada de serviço e constrói as respostas HTTP.
+Concentra as regras de negócio, como cadastro, verificação de duplicidade, consultas, atualização e exclusão.
 
-### Service
-
-Concentra as regras de negócio da aplicação.
-
-É nessa camada que são tratadas operações como cadastro, verificação de duplicidade, busca, atualização e exclusão.
-
-### Repository
+**Repository**
 
 Realiza a comunicação com o banco de dados utilizando Spring Data JPA.
 
-### Entity
+**Entity**
 
-Representa a estrutura persistida no banco.
+Representa a estrutura persistida no banco de dados.
 
-### DTO
+**DTO**
 
-É utilizado para transferência de dados entre as camadas, evitando utilizar diretamente a entidade como contrato externo da API.
+Define os dados transferidos pela API, evitando utilizar diretamente a entidade de persistência como contrato externo.
 
-### Mapper
+**Mapper**
 
-Responsável pela conversão entre `ShelfieModel` e `ShelfieDTO`.
+Centraliza a conversão entre `ShelfieModel` e `ShelfieDTO`.
 
-### Exception / Infra
+**Exception / Infra**
 
 Centralizam as exceções específicas da aplicação e o tratamento global dos erros HTTP.
 
+**Config**
+
+Contém configurações adicionais da aplicação, incluindo a configuração da documentação OpenAPI.
+
 ---
 
-# 📖 Estrutura de um livro
+## Estrutura de um livro
 
-Exemplo:
+Exemplo de representação de um livro:
 
 ```json
 {
@@ -200,7 +160,7 @@ Exemplo:
 
 ---
 
-# 🌐 API
+## API
 
 URL base local:
 
@@ -208,24 +168,24 @@ URL base local:
 http://localhost:8080/shelfie
 ```
 
-## Endpoints
+### Endpoints
 
-| Método | Endpoint | Descrição | Status principal |
+| Método | Endpoint | Retorno | Descrição |
 |---|---|---|---|
-| `POST` | `/shelfie` | Cadastrar um livro | `201 Created` |
-| `GET` | `/shelfie` | Listar todos os livros | `200 OK` |
-| `GET` | `/shelfie/{id}` | Buscar livro por ID | `200 OK` |
-| `GET` | `/shelfie/titulo?titulo=` | Buscar por título | `200 OK` |
-| `GET` | `/shelfie/autor?autor=` | Buscar por autor | `200 OK` |
-| `GET` | `/shelfie/genero?genero=` | Buscar por gênero | `200 OK` |
-| `GET` | `/shelfie/status?statusDeLeitura=` | Buscar por status | `200 OK` |
-| `GET` | `/shelfie/avaliacao?avaliacao=` | Buscar por avaliação | `200 OK` |
-| `PATCH` | `/shelfie/{id}` | Atualizar parcialmente um livro | `200 OK` |
-| `DELETE` | `/shelfie/{id}` | Excluir um livro | `204 No Content` |
+| `POST` | `/shelfie` | `ShelfieDTO` | Cadastrar um livro |
+| `GET` | `/shelfie` | `List<ShelfieDTO>` | Listar todos os livros |
+| `GET` | `/shelfie/{id}` | `ShelfieDTO` | Buscar livro por ID |
+| `GET` | `/shelfie/titulo?titulo=` | `ShelfieDTO` | Buscar livro por título |
+| `GET` | `/shelfie/autor?autor=` | `List<ShelfieDTO>` | Buscar livros por autor |
+| `GET` | `/shelfie/genero?genero=` | `List<ShelfieDTO>` | Buscar livros por gênero |
+| `GET` | `/shelfie/status?statusDeLeitura=` | `List<ShelfieDTO>` | Buscar livros por status de leitura |
+| `GET` | `/shelfie/avaliacao?avaliacao=` | `List<ShelfieDTO>` | Buscar livros por avaliação |
+| `PATCH` | `/shelfie/{id}` | `ShelfieDTO` | Atualizar parcialmente um livro |
+| `DELETE` | `/shelfie/{id}` | Sem corpo | Excluir um livro |
 
 ---
 
-# 📥 Cadastro
+## Cadastro
 
 ### Request
 
@@ -251,8 +211,6 @@ Content-Type: application/json
 201 Created
 ```
 
-Exemplo:
-
 ```json
 {
   "id": 1,
@@ -267,17 +225,63 @@ Exemplo:
 
 ---
 
-# ✏️ Atualização parcial
+## Filtros
 
-A atualização utiliza `PATCH`.
+Além da consulta geral e da busca por ID, a API permite consultar livros utilizando diferentes critérios.
 
-Isso permite alterar apenas os campos necessários, mantendo os valores já existentes nos campos não enviados.
+### Título
+
+```http
+GET /shelfie/titulo?titulo=O Hobbit
+```
+
+A busca por título retorna o livro correspondente ao título informado.
+
+### Autor
+
+```http
+GET /shelfie/autor?autor=J. R. R. Tolkien
+```
+
+Pode retornar múltiplos livros cadastrados para o mesmo autor.
+
+### Gênero
+
+```http
+GET /shelfie/genero?genero=Fantasia
+```
+
+Retorna os livros pertencentes ao gênero informado.
+
+### Status de leitura
+
+```http
+GET /shelfie/status?statusDeLeitura=EM_ANDAMENTO
+```
+
+Retorna os livros que possuem o status informado.
+
+### Avaliação
+
+```http
+GET /shelfie/avaliacao?avaliacao=EXCELENTE
+```
+
+Retorna os livros que possuem a avaliação informada.
+
+---
+
+## Atualização parcial
+
+O Shelfie utiliza `PATCH` para atualização de livros.
+
+Isso permite alterar somente os campos enviados na requisição, mantendo os valores existentes nos campos não informados.
+
+Exemplo:
 
 ```http
 PATCH /shelfie/1
 ```
-
-Body:
 
 ```json
 {
@@ -293,7 +297,7 @@ Resposta:
 
 ---
 
-# 🗑️ Exclusão
+## Exclusão
 
 ```http
 DELETE /shelfie/1
@@ -307,63 +311,31 @@ Resposta:
 
 ---
 
-# ⚠️ Tratamento de exceções
+## ⚠️ Tratamento de exceções
 
-O projeto utiliza:
+A aplicação possui tratamento global de exceções, permitindo centralizar a conversão de erros de domínio em respostas HTTP.
 
-```java
-@RestControllerAdvice
-```
-
-para centralizar o tratamento das exceções da API.
-
-Isso evita espalhar lógica de tratamento de erros pelos controllers.
-
-## Livro não encontrado
-
-Caso um livro solicitado não exista:
-
-```http
-404 Not Found
-```
-
-Exemplo:
+Entre os principais casos tratados estão:
 
 ```text
-Livro com o id '999' não encontrado.
+Livro não encontrado → 404 Not Found
+Livro duplicado       → 409 Conflict
 ```
 
-## Livro duplicado
-
-Caso seja realizado um novo cadastro de um livro já existente:
-
-```http
-409 Conflict
-```
-
-Exemplo:
+As exceções de domínio possuem classes específicas:
 
 ```text
-O livro já está cadastrado.
+LivroNaoEncontradoException
+LivroDuplicadoException
 ```
 
----
-
-# 🧠 Algumas decisões técnicas
-
-## `PUT` → `PATCH`
-
-A atualização inicialmente utilizava `PUT`.
-
-Durante a revisão da API, identifiquei que a implementação preservava os valores existentes quando determinado campo não era enviado.
-
-Como esse comportamento caracteriza uma **atualização parcial**, o endpoint foi alterado para `PATCH`.
+O tratamento centralizado evita espalhar lógica relacionada a erros pelos controllers.
 
 ---
 
 ## Códigos HTTP
 
-Os principais endpoints foram ajustados para utilizar respostas coerentes com suas operações.
+Os principais endpoints utilizam respostas coerentes com suas respectivas operações:
 
 ```text
 POST    → 201 Created
@@ -372,54 +344,113 @@ PATCH   → 200 OK
 DELETE  → 204 No Content
 ```
 
-Erros de domínio atualmente tratados:
+Erros de domínio tratados:
 
 ```text
 Livro não encontrado → 404 Not Found
-Livro duplicado      → 409 Conflict
+Livro duplicado       → 409 Conflict
 ```
 
 ---
 
-## Spring MVC em vez de WebFlux
+## 📘 Swagger / OpenAPI
 
-O projeto inicialmente possuía dependências de Spring MVC e WebFlux simultaneamente.
+A API possui documentação interativa utilizando **Swagger/OpenAPI**.
 
-Durante a revisão da arquitetura, identifiquei que a aplicação não utilizava programação reativa, como:
+Com a aplicação em execução, acesse:
 
 ```text
-Mono
-Flux
-WebClient
-Reactor
+http://localhost:8080/swagger-ui/index.html
 ```
 
-As dependências do WebFlux foram removidas para manter o projeto mais simples e coerente com sua arquitetura atual.
+A interface permite visualizar:
+
+- endpoints disponíveis;
+- métodos HTTP;
+- parâmetros;
+- modelos utilizados pela API;
+- operações disponíveis.
+
+Também é possível executar requisições diretamente pela interface do Swagger.
 
 ---
 
-# 🧪 Testes atuais
+## Testes
 
-Os endpoints estão sendo testados manualmente utilizando o **Postman** durante o desenvolvimento.
+O projeto possui testes automatizados para a camada de serviço.
 
-Alguns fluxos já validados:
+Os testes unitários verificam comportamentos relacionados às regras de negócio da aplicação e ajudam a garantir que alterações futuras não quebrem funcionalidades existentes.
+
+Estrutura atual:
 
 ```text
-POST                → 201 Created
-GET                 → 200 OK
-PATCH               → 200 OK
-DELETE              → 204 No Content
-GET após exclusão   → 404 Not Found
-Cadastro duplicado  → 409 Conflict
+src/test/java/br/com/Shelfie
+│
+├── ShelfieModelApplicationTests.java
+│
+└── services
+    └── ShelfieServiceTest.java
 ```
 
-Testes automatizados fazem parte das próximas etapas de evolução do projeto.
+### Executando os testes
+
+Windows:
+
+```bash
+.\mvnw.cmd clean test
+```
+
+Linux / macOS:
+
+```bash
+./mvnw clean test
+```
+
+O build da versão atual é concluído com sucesso.
 
 ---
 
-# ▶️ Executando o projeto
+## Decisões técnicas
 
-## Pré-requisitos
+### `PATCH` em vez de `PUT`
+
+A atualização inicialmente utilizava `PUT`.
+
+Durante a revisão da API, foi identificado que a implementação preservava os valores existentes quando determinado campo não era enviado.
+
+Como esse comportamento representa uma **atualização parcial**, o endpoint passou a utilizar `PATCH`.
+
+### Spring MVC em vez de WebFlux
+
+Durante o desenvolvimento, o projeto chegou a possuir dependências de Spring MVC e WebFlux simultaneamente.
+
+Como a aplicação não utiliza programação reativa, as dependências relacionadas ao WebFlux foram removidas.
+
+Isso mantém o projeto mais simples e coerente com sua arquitetura atual.
+
+### DTO em vez de expor diretamente a Entity
+
+A entidade representa a estrutura persistida no banco de dados, enquanto o DTO representa os dados transferidos pela aplicação.
+
+Essa separação evita utilizar diretamente o modelo de persistência como contrato externo da API.
+
+### Mapper
+
+A conversão entre DTO e Entity é centralizada no `ShelfieMapper`.
+
+Isso evita espalhar lógica de conversão pelas outras camadas da aplicação.
+
+### Tratamento global de erros
+
+As exceções específicas da aplicação são tratadas de maneira centralizada.
+
+Dessa forma, os controllers permanecem focados no recebimento das requisições e construção das respostas HTTP.
+
+---
+
+## ▶️ Executando o projeto
+
+### Pré-requisitos
 
 Para executar o Shelfie localmente:
 
@@ -428,99 +459,100 @@ Para executar o Shelfie localmente:
 
 O projeto utiliza **Maven Wrapper**, portanto não é necessário instalar Maven globalmente.
 
----
-
-## Clone
+### Clone
 
 ```bash
 git clone https://github.com/devlourenco/Shelfie.git
 ```
 
-Entre no projeto:
+Entre na pasta:
 
 ```bash
 cd Shelfie
 ```
 
----
+### Executar os testes
 
-## Executar os testes
-
-### Windows
+Windows:
 
 ```bash
-mvnw.cmd clean test
+.\mvnw.cmd clean test
 ```
 
-### Linux / macOS
+Linux / macOS:
 
 ```bash
 ./mvnw clean test
 ```
 
----
+### Iniciar a aplicação
 
-## Iniciar a aplicação
-
-### Windows
+Windows:
 
 ```bash
-mvnw.cmd spring-boot:run
+.\mvnw.cmd spring-boot:run
 ```
 
-### Linux / macOS
+Linux / macOS:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-Depois:
+A aplicação será iniciada localmente.
+
+API:
 
 ```text
-http://localhost:8080
+http://localhost:8080/shelfie
+```
+
+Swagger:
+
+```text
+http://localhost:8080/swagger-ui/index.html
 ```
 
 ---
 
-# 🗄️ Banco de dados
+## Banco de dados
 
-Atualmente o projeto utiliza **H2 Database** durante o desenvolvimento.
+Atualmente o Shelfie utiliza **H2 Database**.
 
-A utilização do H2 facilita a execução e os testes locais sem depender da configuração de um banco externo.
+A utilização do H2 facilita a execução e os testes locais sem exigir a configuração de um servidor externo de banco de dados.
 
-Uma futura versão poderá utilizar um banco persistente, como PostgreSQL.
-
----
-
-# 🤖 Uso de Inteligência Artificial no aprendizado
-
-Durante o desenvolvimento do Shelfie utilizo ferramentas de Inteligência Artificial como **apoio ao processo de estudo e revisão técnica**.
-
-A IA é utilizada principalmente para:
-
-- discutir possíveis soluções;
-- revisar código que implementei;
-- apontar problemas que posso não ter identificado;
-- explicar conceitos de Java e Spring Boot;
-- discutir decisões de arquitetura;
-- sugerir cenários de teste;
-- revisar boas práticas;
-- organizar etapas de estudo;
-- revisar commits e documentação.
-
-A ferramenta não é utilizada como substituta do entendimento do projeto.
-
-Meu processo consiste em **implementar, testar, analisar e compreender** o código. Quando uma mudança é sugerida, procuro entender o problema que ela resolve e o motivo técnico antes de incorporá-la ao projeto.
-
-Também considero aprender a utilizar IA de forma responsável como parte da formação de um desenvolvedor atual: usando-a para aumentar a capacidade de investigação e aprendizado, sem abrir mão do domínio sobre aquilo que está sendo construído.
+Em uma futura evolução, o projeto poderá utilizar um banco persistente como PostgreSQL.
 
 ---
 
-# 🔄 Processo de desenvolvimento
+## Aprendizados
 
-Tenho desenvolvido o Shelfie de maneira incremental.
+Durante o desenvolvimento do Shelfie foram praticados conceitos como:
 
-Meu fluxo de estudo tem sido:
+- desenvolvimento de APIs REST;
+- Java e orientação a objetos;
+- Spring Boot;
+- arquitetura em camadas;
+- Spring Web MVC;
+- Spring Data JPA;
+- persistência de dados;
+- DTOs;
+- mapeamento entre DTO e Entity;
+- regras de negócio;
+- tratamento global de exceções;
+- exceções personalizadas;
+- códigos de status HTTP;
+- contratos REST;
+- Bean Validation;
+- documentação com Swagger/OpenAPI;
+- testes unitários;
+- JUnit e Mockito;
+- Maven;
+- Git e GitHub;
+- organização de commits;
+- revisão e refatoração de código.
+
+O projeto também foi desenvolvido de maneira incremental, utilizando um ciclo de implementação, teste, revisão e refatoração.
 
 ```text
 Definir uma tarefa
@@ -529,117 +561,77 @@ Implementar
        ↓
 Testar
        ↓
-Encontrar problemas
-       ↓
-Estudar e revisar
+Revisar
        ↓
 Refatorar
        ↓
 Executar o build
        ↓
-Revisar o Git diff
+Revisar alterações
        ↓
 Criar um commit focado
 ```
 
-Esse processo também é uma forma de praticar hábitos de desenvolvimento encontrados em projetos profissionais.
-
 ---
 
-# 📈 Evolução do projeto
+## Próximas evoluções
 
-Algumas melhorias realizadas durante o desenvolvimento:
+A versão atual do Shelfie está concluída.
 
-- organização do histórico inicial do Git;
-- revisão do `.gitignore`;
-- configuração do `.gitattributes`;
-- normalização de line endings;
-- remoção de dependências WebFlux não utilizadas;
-- revisão do tipo utilizado pelo ID das entidades;
-- criação de exceções personalizadas;
-- implementação de tratamento global de exceções;
-- melhoria dos contratos REST;
-- alteração de `PUT` para `PATCH`;
-- revisão dos códigos de status HTTP;
-- testes manuais dos endpoints.
+Possíveis melhorias para versões futuras:
 
----
-
-# 🗺️ Roadmap
-
-## Próximas etapas
-
-- [ ] Implementar Bean Validation
 - [ ] Melhorar as regras de duplicidade
-- [ ] Ajustar filtros para suportar múltiplos resultados
 - [ ] Padronizar o corpo das respostas de erro
-- [ ] Adicionar OpenAPI / Swagger
-- [ ] Criar testes unitários
 - [ ] Criar testes de integração
-- [ ] Melhorar a documentação da API
-
-## Possíveis evoluções futuras
-
-- [ ] Paginação e ordenação
-- [ ] PostgreSQL
-- [ ] Flyway
-- [ ] Docker
-- [ ] GitHub Actions
-- [ ] Deploy
-- [ ] Autenticação
-- [ ] Usuários
-- [ ] Progresso de leitura
-- [ ] Datas de início e conclusão
-- [ ] Histórico de leituras
+- [ ] Adicionar paginação e ordenação
+- [ ] Utilizar PostgreSQL
+- [ ] Adicionar migrations com Flyway
+- [ ] Containerizar a aplicação com Docker
+- [ ] Criar pipeline com GitHub Actions
+- [ ] Realizar deploy da API
+- [ ] Adicionar autenticação
+- [ ] Implementar usuários
+- [ ] Adicionar progresso de leitura
+- [ ] Registrar datas de início e conclusão
+- [ ] Criar histórico de leituras
 
 ---
 
-# 🚧 Status do projeto
+## Status do projeto
 
-**Em desenvolvimento.**
+**Versão atual concluída.**
 
-O CRUD principal, os contratos HTTP e o tratamento inicial de exceções já estão funcionais.
+O Shelfie possui atualmente:
 
-O projeto continuará sendo atualizado conforme avanço nos estudos de Java, Spring Boot, APIs REST, testes e desenvolvimento Back-end.
+- CRUD de livros;
+- filtros de consulta;
+- arquitetura em camadas;
+- DTO e Mapper;
+- persistência com JPA;
+- regras de negócio;
+- Bean Validation;
+- tratamento global de exceções;
+- documentação Swagger/OpenAPI;
+- testes unitários.
 
----
-
-# 👨‍💻 Sobre mim
-
-Meu nome é **Guilherme Simões Lourenço**.
-
-Sou estudante de **Sistemas de Informação** e atualmente estou aprofundando meus conhecimentos em desenvolvimento de software, principalmente em:
-
-- Java;
-- Spring Boot;
-- desenvolvimento Back-end;
-- APIs REST;
-- bancos de dados;
-- resolução de problemas.
-
-Estou em busca da minha **primeira oportunidade como estagiário em desenvolvimento de software**, onde possa aplicar os conhecimentos que venho adquirindo, aprender com profissionais mais experientes e contribuir com projetos reais.
-
-O Shelfie representa não apenas uma aplicação, mas também parte do meu processo de aprendizado e preparação para entrar profissionalmente na área de tecnologia.
+Novas funcionalidades poderão ser adicionadas futuramente em novas versões do projeto.
 
 ---
 
-# 🔗 Links
+## Autor
 
-📚 **Repositório:**  
-https://github.com/devlourenco/Shelfie
+**Guilherme Simões Lourenço**
 
-💻 **GitHub:**  
-https://github.com/devlourenco
+Estudante de Sistemas de Informação, aprofundando conhecimentos em desenvolvimento de software, Java, Spring Boot, APIs REST e bancos de dados.
 
-💼 **LinkedIn:**  
-https://www.linkedin.com/in/guilherme-simoes-lourenco/
+[GitHub](https://github.com/devlourenco)
+
+[LinkedIn](https://www.linkedin.com/in/guilherme-simoes-lourenco/)
 
 ---
 
-# 💬 Feedback
+## Feedback
 
-Este é um projeto de estudo e evolução profissional.
+Feedbacks sobre código, arquitetura, testes, organização e boas práticas são bem-vindos.
 
-Feedbacks sobre código, arquitetura, organização, testes, boas práticas ou decisões técnicas são muito bem-vindos.
-
-Se você encontrou algo que pode ser melhorado, fique à vontade para abrir uma issue ou entrar em contato comigo pelo LinkedIn.
+Caso encontre algo que possa ser melhorado, fique à vontade para abrir uma issue no repositório.
